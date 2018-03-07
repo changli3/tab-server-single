@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion : 2010-09-09
+Description: Apache Guacamole Server
+Parameters:
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - m1.small
+      - m4.large
+    Description: Enter t2.micro, m1.small, or m4.large. Default is t2.micro.
+  InstanceSubnet:
+    Type: String
+    Default: subnet-2b976000
+    Description: subnet id of instance
+  InstanceKeyPairParameter:
+    Type: String
+    Default: TreaEBSLab
+    Description: Name of the KeyPair you choose to use to ssh into the box    
+Resources:
+  ApacheGuacamoleSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow Apache Guacamole
+      VpcId: vpc-26e7a940
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '8080'
+        ToPort: '8080'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: '0'
+        ToPort: '65535'
+        CidrIp: 0.0.0.0/0
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-f4cc1de2
+      KeyName:
+        Ref: InstanceKeyPairParameter
+      InstanceType:
+        Ref: InstanceTypeParameter
+      SecurityGroupIds:
+        - !GetAtt ApacheGuacamoleSG.GroupId
+      SubnetId:
+        Ref: InstanceSubnet
+      Tags:
+        -
+          Key: Name
+          Value: Apache Guacamole Server
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          apt-get update -y
+          yes | sudo apt-get install -y guacamole-tomcat libguac-client-ssh0 libguac-client-rdp0
+          sudo /etc/init.d/guacd start
+          sudo /etc/init.d/tomcat8 restart

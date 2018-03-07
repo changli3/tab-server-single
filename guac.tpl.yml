@@ -1,3 +1,4 @@
+
 AWSTemplateFormatVersion : 2010-09-09
 Description: Apache Guacamole Server
 Parameters:
@@ -18,29 +19,6 @@ Parameters:
     Default: TreaEBSLab
     Description: Name of the KeyPair you choose to use to ssh into the box    
 Resources:
-  ApacheGuacamoleSG:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow Apache Guacamole
-      VpcId: vpc-26e7a940
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: '80'
-        ToPort: '80'
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: '8080'
-        ToPort: '8080'
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: '22'
-        ToPort: '22'
-        CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-      - IpProtocol: tcp
-        FromPort: '0'
-        ToPort: '65535'
-        CidrIp: 0.0.0.0/0
   Ec2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -50,7 +28,7 @@ Resources:
       InstanceType:
         Ref: InstanceTypeParameter
       SecurityGroupIds:
-        - !GetAtt ApacheGuacamoleSG.GroupId
+        - sg-58e1fc3d
       SubnetId:
         Ref: InstanceSubnet
       Tags:

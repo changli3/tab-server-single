@@ -444,7 +444,7 @@ def run_install(options, secrets):
 		
     run_command(tabadmin_path, ['set', 'ssl.cert.file','C:/tabsetup/tableau.crt'])
     run_command(tabadmin_path, ['set', 'ssl.key.file','C:/tabsetup/tableau.key'])
-    run_command(tabadmin_path, ['set', 'ssl.key.passphrase','""'])
+    run_command(tabadmin_path, ['set', 'ssl.key.passphrase',''])
     run_command(tabadmin_path, ['set', 'ssl.enabled','true'])
     # Run configure to be sure any credential changes are properly distributed. This also works around AWS-related configuration quirks.
     run_command(tabadmin_path, ['configure'])

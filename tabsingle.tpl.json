@@ -60,7 +60,9 @@
         },
         "AmiImageId": {
 			"Default": "ami-e443379e",
-            "Description": "Please enter an windows image ID. Tested on windows2012r2. Please notice this image id differs from region to region. Default is for us-east-01 of the public aws.",
+            "Description": "Please enter an windows image ID. Tested on windows2012r2. Please notice this image 
+
+id differs from region to region. Default is for us-east-01 of the public aws.",
             "Type": "String"
         },
 
@@ -70,7 +72,9 @@
             "Type": "String"
         },
         "InstanceSecurityGroup": {
-            "Description": "Please enter the security group ID. Default here is one I created in the lab for test.",
+            "Description": "Please enter the security group ID. Default here is one I created in the lab for 
+
+test.",
 			"Default": "sg-58e1fc3d",
             "Type": "String"
         },
@@ -91,7 +95,9 @@
         },
         "TableauServerLicenseKey": {
 			"Default": "TSNO-2BC9-53C0-XXXX-XXXX",
-            "Description": "License Key (leave blank for trial). Please empty this field if you are running a test run",
+            "Description": "License Key (leave blank for trial). Please empty this field if you are running a 
+
+test run",
             "Type": "String"
         },
         "TableauServerExe": {
@@ -161,14 +167,15 @@
                 }
             ],
             "ParameterLabels": {
+
                 "KeyPairName": {
                     "default": "Key Pair Name"
                 },
                 "ContentAdminUser": {
-                    "default": "Portal Admin Username"
+                    "default": "Tableau Admin Username"
                 },
                 "ContentAdminPassword": {
-                    "default": "Portal Admin Password"
+                    "default": "Tableau Admin Password"
                 },
                 "TableauServerLicenseKey": {
                     "default": "Tableau Activation Key"
@@ -288,7 +295,9 @@
                                 }
                             },
                             "c:\\tabsetup\\ScriptedInstaller.py": {
-                                "source": "https://s3.amazonaws.com/trlab-templates/ScriptedInstaller.py"                                
+                                "source": "https://s3.amazonaws.com/trlab-templates/ScriptedInstaller.py"         
+
+                       
                             },
                             "c:\\tabsetup\\python-2.7.12.msi": {
                                 "source": "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi"
@@ -387,7 +396,9 @@
                             [
                                 "<script>",
                                 {
-                                    "Fn::Sub": "cfn-init.exe -v -s ${AWS::StackId} -r TableauWindowsServer --region ${AWS::Region}"
+                                    "Fn::Sub": "cfn-init.exe -v -s ${AWS::StackId} -r TableauWindowsServer --
+
+region ${AWS::Region}"
                                 },
                                 {
                                     "Fn::Sub": [

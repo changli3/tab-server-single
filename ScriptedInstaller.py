@@ -441,10 +441,14 @@ def run_install(options, secrets):
     else:
         print('Runas credentials not specified; using defaults')
 
+		
+    run_command(tabadmin_path, ['set', 'ssl.cert.file','C:/tabsetup/tableau.crt'])
+    run_command(tabadmin_path, ['set', 'ssl.key.file','C:/tabsetup/tableau.key'])
+    run_command(tabadmin_path, ['set', 'ssl.key.passphrase','""'])
+    run_command(tabadmin_path, ['set', 'ssl.enabled','true'])
     # Run configure to be sure any credential changes are properly distributed. This also works around AWS-related configuration quirks.
     run_command(tabadmin_path, ['configure'])
 
-        # Install the Windows service
     install_service(tabadmin_path, options, secrets)
 
     # If they're using the 'trial' option, activate with that. Otherwise, use the license key given on the cmdline

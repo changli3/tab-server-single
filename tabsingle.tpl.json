@@ -1,0 +1,440 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "WC2H AWS CF Template for Tableau Server instance running on Windows",
+    "Parameters": {
+        "ContentAdminPassword": {
+			"Default": "admin#123!!",
+            "Description": "The password for the initial Admin user for Tableau server",
+            "NoEcho": "true",
+            "Type": "String"
+        },
+        "ContentAdminUser": {
+            "Default": "admin",
+            "Description": "The name of the initial administrator",
+            "MinLength": "1",
+            "Type": "String"
+        },
+        "KeyPairName": {
+            "ConstraintDescription": "The name of an existing EC2 KeyPair.",
+            "Description": "Public/private key pairs",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "RegCity": {
+            "Type": "String"
+        },
+        "RegCompany": {
+            "Type": "String"
+        },
+        "RegCountry": {
+            "Type": "String"
+        },
+        "RegDepartment": {
+            "Type": "String"
+        },
+        "RegEmail": {
+            "Default": "chang.li3@treasury.gov",
+            "Type": "String"
+        },
+        "RegFirstName": {
+            "Default": "Chang",
+            "Type": "String"
+        },
+        "RegIndustry": {
+            "Type": "String"
+        },
+        "RegLastName": {
+            "Default": "Li",
+            "Type": "String"
+        },
+        "RegPhone": {
+            "Type": "String"
+        },
+        "RegState": {
+            "Type": "String"
+        },
+        "RegTitle": {
+            "Type": "String"
+        },
+        "RegZip": {
+            "Type": "String"
+        },
+        "AmiImageId": {
+			"Default": "ami-e443379e",
+            "Description": "Please enter an windows image ID. Tested on windows2012r2. Please notice this image id differs from region to region. Default is for us-east-01 of the public aws.",
+            "Type": "String"
+        },
+
+        "InstanceSubnet": {
+            "Description": "Please enter instance subnet ID. Default here is one I created in the lab for test.",
+			"Default": "subnet-2b976000",
+            "Type": "String"
+        },
+        "InstanceSecurityGroup": {
+            "Description": "Please enter the security group ID. Default here is one I created in the lab for test.",
+			"Default": "sg-58e1fc3d",
+            "Type": "String"
+        },
+        "InstanceType": {
+            "Description": "Instance type - need to 4xlarge and above",
+			"Default": "m4.4xlarge",
+            "Type": "String"
+        },
+        "SystemVolumeSize": {
+            "Description": "System volume size in mb",
+			"Default": "100",
+            "Type": "String"
+        },
+        "DataVolumeSize": {
+            "Description": "Data volume size in mb",
+			"Default": "200",
+            "Type": "String"
+        },
+        "TableauServerLicenseKey": {
+			"Default": "TSNO-2BC9-53C0-XXXX-XXXX",
+            "Description": "License Key (leave blank for trial). Please empty this field if you are running a test run",
+            "Type": "String"
+        },
+        "TableauServerExe": {
+			"Default": "https://downloads.tableau.com/esdalt/10.5.0/TableauServer-64bit-10-5-0.exe",
+            "Description": "URL to download the Tableau server executable. Default here is the 10.5 url.",
+            "Type": "String"
+        },
+        "TableauServerCrt": {
+			"Default": "https://s3.amazonaws.com/trlab-templates/tableau.crt",
+            "Description": "https public certificate download URL",
+            "Type": "String"
+        },
+        "TableauServerKey": {
+			"Default": "https://s3.amazonaws.com/trlab-templates/tableau.key",
+            "Description": "https private key download URL",
+            "Type": "String"
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "AWS Environment"
+                    },
+                    "Parameters": [
+                        "KeyPairName",
+						"AmiImageId",
+                        "InstanceSubnet",
+						"InstanceSecurityGroup",
+						"InstanceType",
+						"SystemVolumeSize",
+						"DataVolumeSize"						
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Configure Initial Tableau Server and Admin"
+                    },
+                    "Parameters": [
+						"TableauServerCrt",
+						"TableauServerKey",
+                        "ContentAdminUser",
+                        "ContentAdminPassword"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Registration"
+                    },
+                    "Parameters": [
+						"TableauServerExe",
+                        "TableauServerLicenseKey",
+                        "RegFirstName",
+                        "RegLastName",
+                        "RegEmail",
+                        "RegCompany",
+                        "RegTitle",
+                        "RegDepartment",
+                        "RegIndustry",
+                        "RegPhone",
+                        "RegCity",
+                        "RegState",
+                        "RegZip",
+                        "RegCountry"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
+                "ContentAdminUser": {
+                    "default": "Portal Admin Username"
+                },
+                "ContentAdminPassword": {
+                    "default": "Portal Admin Password"
+                },
+                "TableauServerLicenseKey": {
+                    "default": "Tableau Activation Key"
+                },
+                "RegFirstName": {
+                    "default": "First Name"
+                },
+                "RegLastName": {
+                    "default": "Last Name"
+                },
+                "RegEmail": {
+                    "default": "Email Address"
+                },
+                "RegCompany": {
+                    "default": "Company"
+                },
+                "RegTitle": {
+                    "default": "Title"
+                },
+                "RegDepartment": {
+                    "default": "Department"
+                },
+                "RegIndustry": {
+                    "default": "Industry"
+                },
+                "RegPhone": {
+                    "default": "Phone"
+                },
+                "RegCity": {
+                    "default": "City"
+                },
+                "RegState": {
+                    "default": "State"
+                },
+                "RegZip": {
+                    "default": "Zip/Postal Code"
+                },
+                "RegCountry": {
+                    "default": "Country"
+                }
+            }
+        }
+    },
+    "Conditions": {
+        "IsTrial": {
+            "Fn::Equals": [
+                "",
+                {
+                    "Ref": "TableauServerLicenseKey"
+                }
+            ]
+        }
+    },
+    "Resources": {
+        "TableauWindowsServer": {
+            "Type": "AWS::EC2::Instance",
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "config": {
+                        "files": {
+                            "c:\\tabsetup\\secrets.json": {
+                                "content": {
+                                    "content_admin_user": {
+                                        "Ref": "ContentAdminUser"
+                                    },
+                                    "content_admin_pass": {
+                                        "Ref": "ContentAdminPassword"
+                                    }
+                                }
+                            },
+                            "c:\\tabsetup\\registration.json": {
+                                "content": {
+                                    "first_name": {
+                                        "Ref": "RegFirstName"
+                                    },
+                                    "last_name": {
+                                        "Ref": "RegLastName"
+                                    },
+                                    "email": {
+                                        "Ref": "RegEmail"
+                                    },
+                                    "company": {
+                                        "Fn::Join": [
+                                            ";",
+                                            [
+                                                {
+                                                    "Ref": "RegCompany"
+                                                },
+                                                "AWSQuickStart"
+                                            ]
+                                        ]
+                                    },
+                                    "title": {
+                                        "Ref": "RegTitle"
+                                    },
+                                    "department": {
+                                        "Ref": "RegDepartment"
+                                    },
+                                    "industry": {
+                                        "Ref": "RegIndustry"
+                                    },
+                                    "phone": {
+                                        "Ref": "RegPhone"
+                                    },
+                                    "city": {
+                                        "Ref": "RegCity"
+                                    },
+                                    "state": {
+                                        "Ref": "RegState"
+                                    },
+                                    "zip": {
+                                        "Ref": "RegZip"
+                                    },
+                                    "country": {
+                                        "Ref": "RegCountry"
+                                    }
+                                }
+                            },
+                            "c:\\tabsetup\\ScriptedInstaller.py": {
+                                "source": "https://s3.amazonaws.com/trlab-templates/ScriptedInstaller.py"                                
+                            },
+                            "c:\\tabsetup\\python-2.7.12.msi": {
+                                "source": "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi"
+                            },
+                            "c:\\tabsetup\\tableau-server-installer.exe": {
+                                "source": {"Ref": "TableauServerExe"}
+                            },
+                            "c:\\tabsetup\\tableau.crt": {
+                                "source": {"Ref": "TableauServerCrt"}
+                            },
+                            "c:\\tabsetup\\tableau.key": {
+                                "source": {"Ref": "TableauServerKey"}
+                            }
+                        },
+                        "commands": {
+                            "1-install-python": {
+                                "command": "c:\\tabsetup\\python-2.7.12.msi /quiet /qn",
+                                "cwd": "c:\\tabsetup",
+                                "waitAfterCompletion": "0"
+                            },
+                            "2-pip-install-yaml": {
+                                "command": "c:\\Python27\\Scripts\\pip.exe install pyyaml",
+                                "cwd": "c:\\Python27\\Scripts",
+                                "waitAfterCompletion": "0"
+                            },
+                            "3-run-installer": {
+                                "cwd": "c:\\tabsetup",
+                                "command": {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "c:\\Python27\\python.exe",
+                                            "ScriptedInstaller.py",
+                                            "install",
+                                            "--installerLog",
+                                            "C:\\tabsetup\\tabinstall.txt",
+                                            "--enablePublicFwRule",
+                                            "--secretsFile c:\\tabsetup\\secrets.json",
+                                            "--registrationFile c:\\tabsetup\\registration.json",
+                                            "--installDir d:\\tableau",
+                                            {
+                                                "Fn::If": [
+                                                    "IsTrial",
+                                                    "--trialLicense",
+                                                    {
+                                                        "Fn::Sub": "--licenseKey ${TableauServerLicenseKey}"
+                                                    }
+                                                ]
+                                            },
+                                            "c:\\tabsetup\\tableau-server-installer.exe",
+                                            " > c:\\tabsetup\\installer-output.txt 2>&1"
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "0"
+                            },
+                            "4-cleanup-secrets": {
+                                "cwd": "c:\\tabsetup",
+                                "command": "del c:\\tabsetup\\secrets.json",
+                                "waitAfterCompletion": "0"
+                            }
+                        }
+                    }
+                }
+            },
+            "Properties": {
+                "InstanceType": {
+                    "Ref": "InstanceType"                    
+                },
+                "ImageId": {"Ref": "AmiImageId"},
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": {"Ref": "SystemVolumeSize"},
+                            "VolumeType": "gp2"
+                        }
+                    },
+                    {
+                        "DeviceName": "xvdc",
+                        "Ebs": {
+                            "VolumeSize": {"Ref": "DataVolumeSize"},
+                            "VolumeType": "gp2"
+                        }
+                    }
+                ],
+                "SecurityGroupIds": [
+                    {"Ref": "InstanceSecurityGroup"}
+                ],
+				"SubnetId" : {"Ref" : "InstanceSubnet"},
+                "KeyName": {"Ref": "KeyPairName"},
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "\n",
+                            [
+                                "<script>",
+                                {
+                                    "Fn::Sub": "cfn-init.exe -v -s ${AWS::StackId} -r TableauWindowsServer --region ${AWS::Region}"
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "cfn-signal.exe -e %errorlevel% ${WHUrl}",
+                                        {
+                                            "WHUrl": {
+                                                "Fn::Base64": {
+                                                    "Ref": "TableauServerWaitHandle"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "</script>"
+                            ]
+                        ]
+                    }
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "${AWS::StackName}-cfn-tableau-server"
+                        }
+                    }
+                ]
+            }
+        },
+        "TableauServerWaitHandle": {
+            "Type": "AWS::CloudFormation::WaitConditionHandle"
+        },
+        "TableauServerWaitCondition": {
+            "Type": "AWS::CloudFormation::WaitCondition",
+            "Properties": {
+                "Handle": {
+                    "Ref": "TableauServerWaitHandle"
+                },
+                "Timeout": "3600"
+            }
+        }
+    },
+    "Outputs": {
+        "InstanceID": {
+            "Description": "The EC2 InstanceID",
+            "Value": {
+                "Ref": "TableauWindowsServer"
+            }
+        }
+    }
+}

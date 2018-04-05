@@ -1,6 +1,6 @@
 # AWS Template to set up a standalone Tableau server
 
-## Notes Before Launch
+## Prelaunch Notes
 * This is setting up https server, so you need to generate crt and key file and put where the machine can get (TableauServerCrt, TableauServerKey).
 * You can provide the license key. Leave it as is if you need a trial.
 * Replace all the values from your environment whereever applies.

@@ -1,9 +1,9 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "WC2H AWS CF Template for Tableau Server instance running on Windows",
+    "Description": "CF Template for Tableau Server instance running on Windows",
     "Parameters": {
         "ContentAdminPassword": {
-			"Default": "admin#123!!",
+   "Default": "admin#123!!",
             "Description": "The password for the initial Admin user for Tableau server",
             "NoEcho": "true",
             "Type": "String"
@@ -20,15 +20,19 @@
             "Type": "AWS::EC2::KeyPair::KeyName"
         },
         "RegCity": {
+   "Default": "",
             "Type": "String"
         },
         "RegCompany": {
+   "Default": "",
             "Type": "String"
         },
         "RegCountry": {
+   "Default": "",
             "Type": "String"
         },
         "RegDepartment": {
+   "Default": "",
             "Type": "String"
         },
         "RegEmail": {
@@ -40,6 +44,7 @@
             "Type": "String"
         },
         "RegIndustry": {
+   "Default": "",
             "Type": "String"
         },
         "RegLastName": {
@@ -47,71 +52,73 @@
             "Type": "String"
         },
         "RegPhone": {
+   "Default": "",
             "Type": "String"
         },
         "RegState": {
+   "Default": "",
             "Type": "String"
         },
         "RegTitle": {
+   "Default": "",
             "Type": "String"
         },
         "RegZip": {
+   "Default": "",
             "Type": "String"
         },
         "AmiImageId": {
-			"Default": "ami-e443379e",
-            "Description": "Please enter an windows image ID. Tested on windows2012r2. Please notice this image 
-
-id differs from region to region. Default is for us-east-01 of the public aws.",
+   "Default": "ami-e443379e",
+            "Description": "Please enter an windows image ID. Tested on windows2012r2. Please notice this image id differs from region to region. Default is for us-east-01 of the public aws.",
             "Type": "String"
         },
 
         "InstanceSubnet": {
             "Description": "Please enter instance subnet ID. Default here is one I created in the lab for test.",
-			"Default": "subnet-2b976000",
+   "Default": "subnet-2b976000",
             "Type": "String"
         },
         "InstanceSecurityGroup": {
             "Description": "Please enter the security group ID. Default here is one I created in the lab for 
 
 test.",
-			"Default": "sg-58e1fc3d",
+   "Default": "sg-58e1fc3d",
             "Type": "String"
         },
         "InstanceType": {
             "Description": "Instance type - need to 4xlarge and above",
-			"Default": "m4.4xlarge",
+   "Default": "m4.4xlarge",
             "Type": "String"
         },
         "SystemVolumeSize": {
             "Description": "System volume size in mb",
-			"Default": "100",
+   "Default": "100",
             "Type": "String"
         },
         "DataVolumeSize": {
             "Description": "Data volume size in mb",
-			"Default": "200",
+   "Default": "200",
             "Type": "String"
         },
         "TableauServerLicenseKey": {
-			"Default": "TSNO-2BC9-53C0-XXXX-XXXX",
+   "Default": "",
             "Description": "License Key (leave blank for trial). Please empty this field if you are running a 
 
 test run",
             "Type": "String"
         },
         "TableauServerExe": {
-			"Default": "https://downloads.tableau.com/esdalt/10.5.0/TableauServer-64bit-10-5-0.exe",
+   "Default": "https://downloads.tableau.com/esdalt/10.5.0/TableauServer-64bit-10-5-0.exe",
             "Description": "URL to download the Tableau server executable. Default here is the 10.5 url.",
             "Type": "String"
         },
         "TableauServerCrt": {
-			"Default": "https://s3.amazonaws.com/trlab-templates/tableau.crt",
+   "Default": "https://s3.amazonaws.com/trlab-templates/tableau.crt",
             "Description": "https public certificate download URL",
             "Type": "String"
         },
         "TableauServerKey": {
-			"Default": "https://s3.amazonaws.com/trlab-templates/tableau.key",
+   "Default": "https://s3.amazonaws.com/trlab-templates/tableau.key",
             "Description": "https private key download URL",
             "Type": "String"
         }
@@ -125,12 +132,12 @@ test run",
                     },
                     "Parameters": [
                         "KeyPairName",
-						"AmiImageId",
+      "AmiImageId",
                         "InstanceSubnet",
-						"InstanceSecurityGroup",
-						"InstanceType",
-						"SystemVolumeSize",
-						"DataVolumeSize"						
+      "InstanceSecurityGroup",
+      "InstanceType",
+      "SystemVolumeSize",
+      "DataVolumeSize"      
                     ]
                 },
                 {
@@ -138,8 +145,8 @@ test run",
                         "default": "Configure Initial Tableau Server and Admin"
                     },
                     "Parameters": [
-						"TableauServerCrt",
-						"TableauServerKey",
+      "TableauServerCrt",
+      "TableauServerKey",
                         "ContentAdminUser",
                         "ContentAdminPassword"
                     ]
@@ -149,7 +156,7 @@ test run",
                         "default": "Registration"
                     },
                     "Parameters": [
-						"TableauServerExe",
+      "TableauServerExe",
                         "TableauServerLicenseKey",
                         "RegFirstName",
                         "RegLastName",
@@ -387,7 +394,7 @@ test run",
                 "SecurityGroupIds": [
                     {"Ref": "InstanceSecurityGroup"}
                 ],
-				"SubnetId" : {"Ref" : "InstanceSubnet"},
+    "SubnetId" : {"Ref" : "InstanceSubnet"},
                 "KeyName": {"Ref": "KeyPairName"},
                 "UserData": {
                     "Fn::Base64": {

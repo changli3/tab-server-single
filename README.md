@@ -7,7 +7,8 @@
 * Some of the parameters are not listed here but you can find in the cloudformation template file.
 
 
-##Usage:
+## Usage
+
 ```
 git clone https://github.com/changli3/tab-server-single.git
 

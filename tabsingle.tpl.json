@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "CF Template for Tableau Server instance running on Windows",
+    "Description": "CF Template for Tableau Server instance running on Windows by chang.li3@treasury.gov",
     "Parameters": {
         "ContentAdminPassword": {
    "Default": "admin#123!!",
